@@ -43,13 +43,13 @@ for i in range(5):
     elif i == 2:
         plt.plot(x,conv,'g-'); plt.title('stimulus * kernel')
     elif i == 3:
-        plt.plot(x,nonlinear,'c-');
+        plt.plot(x,nonlinear,'c-'); plt.title('nonlinear transformation')
     elif i == 4: # animation
         ax[i].set_xlim([0,repeat_length])
         ax[i].autoscale_view()
         ax[i].set_ylim([-0.05,1.1])
         ax[i].set_xticklabels([0,1,2,3,4,5])
-        im5, = plt.plot([], [], 'y-')
+        im5, = plt.plot([], [], 'y-'); plt.title('spikes')
 
 
     ax[i].axes.get_xaxis().set_ticks([])
