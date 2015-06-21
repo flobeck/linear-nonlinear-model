@@ -1,9 +1,10 @@
 import sys, os, struct, wave, subprocess, scipy
 from scipy.io.wavfile import write
+import numpy as np
 
 def read_wav(wav_file):
     w = wave.open(wav_file)
-    nframes = int(0.5*10**6)
+    nframes = int(10**6)
 
     if w.getnframes() < nframes:
         return
@@ -29,11 +30,12 @@ def getWAV(directory):
                 wavdata = mp3_wav(mp3_file, samplingrate)
             elif f.endswith('.wav'):
                 wavdata = read_wav(f)
-            if wavdata is None:
-                continue
+
+            if wavdata is None:  continue
+
             try:
                 W.append(wavdata)
-                if len(W) == 70:
+                if len(W) == 100:
                     return W
             except:
                 continue

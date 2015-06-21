@@ -9,43 +9,45 @@ def eigen(p):
     p_ = p.mean(axis=0)
     P = p - p_
 
-    L = np.dot(P, np.transpose(P))
-
-    evalues,evectors = linalg.eig(L)
+    evalues,evectors = linalg.eig(np.dot(P, np.transpose(P)))
 
     args  = evalues.argsort()
     evectors = evectors[args]
     evectors = evectors[::-1]
 
-    e = []
+    P_evectors = [(np.dot(np.transpose(P), np.transpose(evectors[i])))
+                  for i in range(0, len(evalues))]
+    eigen = map(lambda e: e/np.linalg.norm(e), P_evectors)
 
-    for i in range(0, int(len(evalues))):
-        Me  = np.dot(np.transpose(np.array(P)),
-                     np.transpose(evectors[i]))
-
-        normalize = Me/np.linalg.norm(Me)
-        e.append(normalize)
-
-    return e
-
+    return eigen
 
 
 ###
-# 'eigenface':
+# 'Eigenface':
 ###
 
 from sklearn.datasets import fetch_olivetti_faces
 
 n_row, n_col = 10, 10; n_eigenfaces = n_row * n_col
 faces = fetch_olivetti_faces(shuffle=True, random_state=RandomState(0)).data
-eigenface = eigen(faces)
+eigenfaces = eigen(faces)
 
-plot_gallery("Eigenfaces", eigenface[:n_eigenfaces], n_col, n_row)
+plot_gallery("Eigenfaces", eigenfaces[:n_eigenfaces], n_col, n_row)
+
 
 
 ###
-# 'eigensound':
+# 'Eigensound':
 ###
+def load(directory):
+    if not os.path.isfile(directory + '.npy'):
+        data = getWAV('./' + directory.title())
+        np.save(directory, data)
+        return data
+    else:
+        return np.load(directory + '.npy')
 
-#eigensound = eigen(getWAV('./test'))  #
-#normalize_write(eigensound, 'X')
+#klavier = load('Klavier')
+
+#eigenklavier = eigen(klavier)
+#normalize_write(eigenklavier, 'k')
